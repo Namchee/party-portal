@@ -1,0 +1,32 @@
+{
+  "version": "d16ba182",
+  "entry": {
+    "module": "/build/entry.client-YMYLWBUP.js",
+    "imports": [
+      "/build/_shared/chunk-XXZOVCAU.js",
+      "/build/_shared/chunk-E7VMOUYL.js"
+    ]
+  },
+  "routes": {
+    "root": {
+      "id": "root",
+      "path": "",
+      "module": "/build/root-BV2UFRQE.js",
+      "hasAction": false,
+      "hasLoader": false,
+      "hasCatchBoundary": false,
+      "hasErrorBoundary": false
+    },
+    "routes/index": {
+      "id": "routes/index",
+      "parentId": "root",
+      "index": true,
+      "module": "/build/routes/index-2RI6MJEH.js",
+      "hasAction": false,
+      "hasLoader": false,
+      "hasCatchBoundary": false,
+      "hasErrorBoundary": false
+    }
+  },
+  "url": "/build/manifest-D16BA182.js"
+}
