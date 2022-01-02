@@ -1,5 +1,5 @@
 {
-  "version": "e6a1951d",
+  "version": "093b2f37",
   "entry": {
     "module": "/build/entry.client-YMYLWBUP.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-G66KBI2T.js",
+      "module": "/build/routes/index-3WEIOINB.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-E6A1951D.js"
+  "url": "/build/manifest-093B2F37.js"
 }

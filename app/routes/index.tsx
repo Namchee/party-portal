@@ -1,6 +1,8 @@
 import * as React from 'react';
 
 export default function Index() {
+  const [account, setAccount] = React.useState('');
+
   const checkWallet = async () => {
     const { ethereum } = window;
     if (!ethereum) {
@@ -10,6 +12,18 @@ export default function Index() {
 
     console.log('Wallet is connected!');
     console.log(ethereum);
+
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
+    console.log(accounts);
+
+    if (accounts.length) {
+      const account = accounts[0];
+      console.log(`Found an authorized account: ${account}`);
+      setAccount(account);
+      return;
+    } 
+
+    console.log('No account found!');
   }
 
   React.useEffect(() => {
