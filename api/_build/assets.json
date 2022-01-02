@@ -1,5 +1,5 @@
 {
-  "version": "d16ba182",
+  "version": "e6a1951d",
   "entry": {
     "module": "/build/entry.client-YMYLWBUP.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-2RI6MJEH.js",
+      "module": "/build/routes/index-G66KBI2T.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-D16BA182.js"
+  "url": "/build/manifest-E6A1951D.js"
 }

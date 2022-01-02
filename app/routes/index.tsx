@@ -1,7 +1,20 @@
-export default function Index() {
-  const party = () => {
+import * as React from 'react';
 
-  };
+export default function Index() {
+  const checkWallet = async () => {
+    const { ethereum } = window;
+    if (!ethereum) {
+      console.log('Wallet is not connected!');
+      return;
+    }
+
+    console.log('Wallet is connected!');
+    console.log(ethereum);
+  }
+
+  React.useEffect(() => {
+    checkWallet();
+  }, []);
 
   return (
     <div className="antialiased w-full
@@ -26,7 +39,6 @@ export default function Index() {
             py-3 px-6
             rounded-md
             bg-blue-500 text-white"
-          onClick={party}
         >
           Let's Party 🎉
         </button>
