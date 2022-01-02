@@ -26,6 +26,19 @@ export default function Index() {
     console.log('No account found!');
   }
 
+  const authorizeWallet = async () => {
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      alert('MetaMask is not installed!');
+      return;
+    }
+
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    console.log(`Connected with: ${accounts[0]}`);
+    setAccount(accounts[0]);
+  };
+
   React.useEffect(() => {
     checkWallet();
   }, []);
@@ -56,6 +69,17 @@ export default function Index() {
         >
           Let's Party 🎉
         </button>
+
+        {!account && <button
+          className="inline mx-auto
+            mt-8
+            py-3 px-6
+            rounded-md
+            bg-blue-500 text-white"
+          onClick={authorizeWallet}
+        >
+          Connect Wallet
+        </button>}
       </div>
     </div>
   );
