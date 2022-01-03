@@ -4,10 +4,10 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
-} from "remix";
+  ScrollRestoration,
+} from 'remix';
 import styles from './style.css';
-import type { MetaFunction, LinksFunction } from "remix";
+import type { MetaFunction, LinksFunction } from 'remix';
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };

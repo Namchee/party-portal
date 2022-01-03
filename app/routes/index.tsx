@@ -1,5 +1,10 @@
 import * as React from 'react';
 
+import { ethers } from 'ethers';
+
+import ABI from '~/constant/contract.json';
+import { CONTRACT_ADDRESS } from '~/constant/eth';
+
 export default function Index() {
   const [account, setAccount] = React.useState('');
 
@@ -39,6 +44,31 @@ export default function Index() {
     setAccount(accounts[0]);
   };
 
+  const party = async () => {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
+      
+      let parties = await contract.getPartyCount();
+      console.log(parties.toNumber());
+
+      const partyTrx = await contract.throwParty();
+      console.log('Mining...', partyTrx.hash);
+
+      await partyTrx.wait();
+      console.log('Mined...', partyTrx.hash);
+
+      parties = await contract.getPartyCount();
+      console.log(parties.toNumber());
+      return;
+    }
+
+    console.log('Ethereum wallet does not exist!');
+  }
+
   React.useEffect(() => {
     checkWallet();
   }, []);
@@ -66,6 +96,7 @@ export default function Index() {
             py-3 px-6
             rounded-md
             bg-blue-500 text-white"
+          onClick={party}
         >
           Let's Party 🎉
         </button>
