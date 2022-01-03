@@ -4,9 +4,12 @@ import { ethers } from 'ethers';
 
 import ABI from '~/constant/contract.json';
 import { CONTRACT_ADDRESS } from '~/constant/eth';
+import SpinnerIcon from '~/components/Icon/LoadingIcon';
 
 export default function Index() {
   const [account, setAccount] = React.useState('');
+  const [partyCount, setPartyCount] = React.useState(0);
+  const [isMining, setIsMining] = React.useState(false);
 
   const checkWallet = async () => {
     const { ethereum } = window;
@@ -40,7 +43,13 @@ export default function Index() {
     }
 
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
+
+    const partyCount = await contract.getPartyCount();
     console.log(`Connected with: ${accounts[0]}`);
+    setPartyCount(partyCount);
     setAccount(accounts[0]);
   };
 
@@ -53,16 +62,18 @@ export default function Index() {
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
       
       let parties = await contract.getPartyCount();
-      console.log(parties.toNumber());
+      setPartyCount(parties.toNumber());
+      setIsMining(true);
 
       const partyTrx = await contract.throwParty();
       console.log('Mining...', partyTrx.hash);
 
       await partyTrx.wait();
       console.log('Mined...', partyTrx.hash);
+      setIsMining(false);
 
       parties = await contract.getPartyCount();
-      console.log(parties.toNumber());
+      setPartyCount(parties.toNumber());
       return;
     }
 
@@ -90,6 +101,13 @@ export default function Index() {
           I am Namchee and I'm a developer, that's pretty cool right? Connect your Ethereum wallet and party with me!
         </div>
 
+        <div className="text-center 
+          mt-4
+          text-5xl
+          font-serif">
+          {account && partyCount}
+        </div>
+
         <button
           className="inline mx-auto
             mt-8
@@ -98,7 +116,7 @@ export default function Index() {
             bg-blue-500 text-white"
           onClick={party}
         >
-          Let's Party 🎉
+          {isMining ? <SpinnerIcon /> : `Let's Party 🎉`}
         </button>
 
         {!account && <button

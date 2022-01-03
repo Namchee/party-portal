@@ -1,5 +1,5 @@
 {
-  "version": "fc9ffd2f",
+  "version": "34ef20f7",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-QLDJMBZM.js",
+      "module": "/build/routes/index-YEUL4P2G.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-FC9FFD2F.js"
+  "url": "/build/manifest-34EF20F7.js"
 }
