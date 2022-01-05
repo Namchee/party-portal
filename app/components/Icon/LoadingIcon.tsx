@@ -10,7 +10,7 @@ function SpinnerIcon(): JSX.Element {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      className="w-5 h-5 animate-spin"
+      className="w-6 h-6 animate-spin"
       viewBox="0 0 24 24"
     >
       <circle

@@ -80,14 +80,25 @@ export default function Index() {
     console.log('Ethereum wallet does not exist!');
   }
 
+  const partyButtonClass = () => {
+   return `mx-auto
+    grid place-items-center
+    mt-8
+    w-36 h-12
+    py-3 px-4
+    rounded-md
+    ${isMining ? 'bg-blue-400' : 'bg-blue-500'}
+    text-white
+    ${isMining && 'cursor-not-allowed'}`;
+  }
+
   React.useEffect(() => {
     checkWallet();
   }, []);
 
   return (
-    <div className="antialiased w-full
-      flex justify-center
-      mt-16">
+    <div className="antialiased w-full min-h-screen
+      grid place-items-center">
 
       <div className="flex flex-col justify-center max-w-2xl">
         <div className="text-center text-4xl font-semibold leading-relaxed">
@@ -108,27 +119,25 @@ export default function Index() {
           {account && partyCount}
         </div>
 
-        <button
-          className="inline mx-auto
-            mt-8
-            py-3 px-6
-            rounded-md
-            bg-blue-500 text-white"
-          onClick={party}
-        >
-          {isMining ? <SpinnerIcon /> : `Let's Party 🎉`}
-        </button>
-
-        {!account && <button
-          className="inline mx-auto
-            mt-8
-            py-3 px-6
-            rounded-md
-            bg-blue-500 text-white"
-          onClick={authorizeWallet}
-        >
-          Connect Wallet
-        </button>}
+        {account ? 
+          <button
+            className={partyButtonClass()}
+            onClick={party}
+            disabled={isMining}
+          >
+            {isMining ? <SpinnerIcon /> : `Let's Party!`}
+          </button> :
+          <button
+            className="inline mx-auto
+              mt-8
+              py-3 px-6
+              rounded-md
+              bg-blue-500 text-white"
+            onClick={authorizeWallet}
+          >
+            Connect Wallet
+          </button>
+        }
       </div>
     </div>
   );
