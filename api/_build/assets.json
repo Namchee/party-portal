@@ -1,5 +1,5 @@
 {
-  "version": "d97526bc",
+  "version": "7bed1e15",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-NKBWMGFI.js",
+      "module": "/build/routes/index-IP4TN3F4.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-D97526BC.js"
+  "url": "/build/manifest-7BED1E15.js"
 }

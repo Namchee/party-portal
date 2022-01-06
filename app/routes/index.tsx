@@ -227,6 +227,34 @@ export default function Index() {
           </div>
         </div>
       </div>
+
+      <footer className="text-gray-400 text-center py-8">
+        Made in 2022 by{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-indigo-400
+            transition-colors
+            hover:text-indigo-300
+            active:text-indigo-300
+            focus:text-indigo-300
+            focus:outline-none"
+          href="https://www.github.com/Namchee">
+          Namchee
+        </a> with guidance from{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-indigo-400
+            transition-colors
+            hover:text-indigo-300
+            active:text-indigo-300
+            focus:text-indigo-300
+            focus:outline-none"
+          href="https://buildspace.so/">
+          buildspace
+        </a>
+      </footer>
     </div>
   );
 }
