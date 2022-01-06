@@ -1,7 +1,11 @@
 module.exports = {
   content: ["./app/**/*.{ts,tsx}"],
   theme: {
-    extend: {}
+    fontFamily: {
+      sans: ['Inter', 'system-ui'],
+      serif: ['ui-serif'],
+      mono: ['Courier New'],
+    }
   },
   variants: {},
   plugins: []

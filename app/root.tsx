@@ -10,12 +10,15 @@ import styles from './style.css';
 import type { MetaFunction, LinksFunction } from 'remix';
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: 'PartyPortal' };
 };
 
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: styles },
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap' },
   ];
 };
 
@@ -28,7 +31,9 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="antialiased
+        min-h-full
+        bg-gray-800 text-white">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

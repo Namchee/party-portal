@@ -85,59 +85,147 @@ export default function Index() {
     grid place-items-center
     mt-8
     w-36 h-12
-    py-3 px-4
+    py-4 px-6
     rounded-md
-    ${isMining ? 'bg-blue-400' : 'bg-blue-500'}
-    text-white
+    text-lg
+    font-medium
+    transition-all
+    hover:bg-indigo-600
+    focus:bg-indigo-600
+    focus:ring-4
+    focus:ring-indigo-400
+    focus:ring-opacity-40
+    focus:outline-none
+    ${isMining ? 'bg-indigo-500' : 'bg-indigo-600'}
     ${isMining && 'cursor-not-allowed'}`;
   }
+
+  const partyForm = () => {
+    return account
+      ? (
+        <>
+          <input
+            type="text"
+            className="mx-auto
+              px-6 py-4
+              bg-gray-700
+              text-xl
+              rounded-md
+              flex-1
+              transition-all
+              focus:ring-4
+            focus:ring-indigo-500
+            focus:ring-opacity-70
+            focus:outline-none"
+            placeholder="Your party punchline" />
+          <button className={partyButtonClass()}
+            disabled={isMining}>
+            {isMining ? <SpinnerIcon /> : 'Throw Party!'}
+          </button>
+        </>
+      )
+    : <button
+      className="bg-indigo-500
+        mx-auto
+        text-lg
+        font-medium
+        py-4 px-6
+        rounded-md
+        transition-all
+        hover:bg-indigo-600
+        focus:bg-indigo-600
+        focus:ring-4
+        focus:ring-indigo-400
+        focus:ring-opacity-40
+        focus:outline-none"
+      onClick={authorizeWallet}
+    >
+      Connect Ethereum Wallet
+    </button>
+  };
 
   React.useEffect(() => {
     checkWallet();
   }, []);
 
   return (
-    <div className="antialiased w-full min-h-screen
-      grid place-items-center">
+    <div className="w-full mx-auto max-w-5xl
+      mt-32">
+      
+      <h1 className="text-center
+        text-5xl tracking-tight font-bold
+        leading-relaxed">
+        Be the life of the party overnight
+      </h1>
 
-      <div className="flex flex-col justify-center max-w-2xl">
-        <div className="text-center text-4xl font-semibold leading-relaxed">
-          👋 Hey there!
+      <h2 className="text-center
+        text-xl max-w-xl mx-auto
+        text-gray-400
+        leading-relaxed
+        mt-2">
+        PartyPopper is a service that throw wild parties for you
+        over the world of metaverse
+      </h2>
+
+      <div className="flex
+        w-full max-w-xl mx-auto
+        space-x-4
+        mt-8">
+        {partyForm()}
+      </div>
+
+      <div className="flex flex-col items-center my-24 space-y-16">
+        <p className="text-center text-3xl font-bold tracking-tight">
+          Leaderboard
+        </p>
+
+        <div className="inline-grid grid-cols-2 grid-flow-row gap-12">
+          <div className="text-center
+            text-5xl
+            font-bold">
+            <p className="uppercase
+              text-sm 
+              text-gray-400
+              tracking-wider
+              mb-4">
+              Parties thrown
+            </p>
+            <p>
+              {partyCount}
+            </p>
+          </div>
+
+          <div className="text-center
+            text-5xl
+            font-bold">
+            <p className="uppercase
+              text-sm 
+              text-gray-400
+              tracking-wider
+              mb-4">
+              Your Parties
+            </p>
+            <p>
+              {partyCount}
+            </p>
+          </div>
+
+          <div className="text-center
+            text-5xl
+            font-bold
+            col-span-2">
+            <p className="uppercase
+              text-sm 
+              text-gray-400
+              tracking-wider
+              mb-4">
+              The Party Animal
+            </p>
+            <p className="font-mono">
+              0xFABCASD
+            </p>
+          </div>
         </div>
-
-        <div className="text-center 
-          text-gray-500
-          mt-4
-          text-lg">
-          I am Namchee and I'm a developer, that's pretty cool right? Connect your Ethereum wallet and party with me!
-        </div>
-
-        <div className="text-center 
-          mt-4
-          text-5xl
-          font-serif">
-          {account && partyCount}
-        </div>
-
-        {account ? 
-          <button
-            className={partyButtonClass()}
-            onClick={party}
-            disabled={isMining}
-          >
-            {isMining ? <SpinnerIcon /> : `Let's Party!`}
-          </button> :
-          <button
-            className="inline mx-auto
-              mt-8
-              py-3 px-6
-              rounded-md
-              bg-blue-500 text-white"
-            onClick={authorizeWallet}
-          >
-            Connect Wallet
-          </button>
-        }
       </div>
     </div>
   );
