@@ -1,5 +1,5 @@
 {
-  "version": "6dd4db58",
+  "version": "dc12e299",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-LB7FPP6H.js",
+      "module": "/build/routes/index-R6APBBLG.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-6DD4DB58.js"
+  "url": "/build/manifest-DC12E299.js"
 }
