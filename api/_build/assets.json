@@ -1,5 +1,5 @@
 {
-  "version": "7bed1e15",
+  "version": "99d9838b",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -11,7 +11,7 @@
     "root": {
       "id": "root",
       "path": "",
-      "module": "/build/root-X2TKPQ5X.js",
+      "module": "/build/root-O4SL6T63.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
@@ -28,5 +28,5 @@
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-7BED1E15.js"
+  "url": "/build/manifest-99D9838B.js"
 }
