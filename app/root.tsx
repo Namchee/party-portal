@@ -33,7 +33,7 @@ export default function App() {
         <Links />
       </head>
       <body className="antialiased
-        min-h-full
+        min-h-screen
         bg-gray-800 text-white">
         <Outlet />
         <ScrollRestoration />

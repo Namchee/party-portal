@@ -1,5 +1,5 @@
 {
-  "version": "99d9838b",
+  "version": "5072b651",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -11,7 +11,7 @@
     "root": {
       "id": "root",
       "path": "",
-      "module": "/build/root-O4SL6T63.js",
+      "module": "/build/root-D5PBJSVV.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-IP4TN3F4.js",
+      "module": "/build/routes/index-66X2OUJU.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-99D9838B.js"
+  "url": "/build/manifest-5072B651.js"
 }

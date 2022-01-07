@@ -1,27 +1,28 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { ethers } from 'ethers';
+import { ethers } from "ethers";
 
-import ABI from '~/constant/contract.json';
-import { CONTRACT_ADDRESS } from '~/constant/eth';
-import SpinnerIcon from '~/components/Icon/LoadingIcon';
+import ABI from "~/constant/contract.json";
+import { CONTRACT_ADDRESS } from "~/constant/eth";
+import SpinnerIcon from "~/components/Icon/LoadingIcon";
 
 export default function Index() {
-  const [account, setAccount] = React.useState('');
+  const [account, setAccount] = React.useState("");
+  const [isAuthorizing, setIsAuthorizing] = React.useState(false);
   const [partyCount, setPartyCount] = React.useState(0);
   const [isMining, setIsMining] = React.useState(false);
 
   const checkWallet = async () => {
     const { ethereum } = window;
     if (!ethereum) {
-      console.log('Wallet is not connected!');
+      console.log("Wallet is not connected!");
       return;
     }
 
-    console.log('Wallet is connected!');
+    console.log("Wallet is connected!");
     console.log(ethereum);
 
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
+    const accounts = await ethereum.request({ method: "eth_accounts" });
     console.log(accounts);
 
     if (accounts.length) {
@@ -29,26 +30,29 @@ export default function Index() {
       console.log(`Found an authorized account: ${account}`);
       setAccount(account);
       return;
-    } 
+    }
 
-    console.log('No account found!');
-  }
+    console.log("No account found!");
+  };
 
   const authorizeWallet = async () => {
     const { ethereum } = window;
 
     if (!ethereum) {
-      alert('MetaMask is not installed!');
+      alert("MetaMask is not installed!");
       return;
     }
 
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    setIsAuthorizing(true);
+
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
     const partyCount = await contract.getPartyCount();
     console.log(`Connected with: ${accounts[0]}`);
+    setIsAuthorizing(false);
     setPartyCount(partyCount);
     setAccount(accounts[0]);
   };
@@ -60,16 +64,16 @@ export default function Index() {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
-      
+
       let parties = await contract.getPartyCount();
       setPartyCount(parties.toNumber());
       setIsMining(true);
 
       const partyTrx = await contract.throwParty();
-      console.log('Mining...', partyTrx.hash);
+      console.log("Mining...", partyTrx.hash);
 
       await partyTrx.wait();
-      console.log('Mined...', partyTrx.hash);
+      console.log("Mined...", partyTrx.hash);
       setIsMining(false);
 
       parties = await contract.getPartyCount();
@@ -77,14 +81,13 @@ export default function Index() {
       return;
     }
 
-    console.log('Ethereum wallet does not exist!');
-  }
+    console.log("Ethereum wallet does not exist!");
+  };
 
   const partyButtonClass = () => {
-   return `mx-auto
+    return `mx-auto
     grid place-items-center
-    mt-8
-    w-36 h-12
+    w-42 h-full
     py-4 px-6
     rounded-md
     text-lg
@@ -96,17 +99,16 @@ export default function Index() {
     focus:ring-indigo-400
     focus:ring-opacity-40
     focus:outline-none
-    ${isMining ? 'bg-indigo-500' : 'bg-indigo-600'}
-    ${isMining && 'cursor-not-allowed'}`;
-  }
+    ${isMining ? "bg-indigo-500" : "bg-indigo-600"}
+    ${isMining && "cursor-not-allowed"}`;
+  };
 
   const partyForm = () => {
-    return account
-      ? (
-        <>
-          <input
-            type="text"
-            className="mx-auto
+    return account ? (
+      <>
+        <input
+          type="text"
+          className="mx-auto
               px-6 py-4
               bg-gray-700
               text-xl
@@ -117,19 +119,20 @@ export default function Index() {
             focus:ring-indigo-500
             focus:ring-opacity-70
             focus:outline-none"
-            placeholder="Your party punchline" />
-          <button className={partyButtonClass()}
-            disabled={isMining}>
-            {isMining ? <SpinnerIcon /> : 'Throw Party!'}
-          </button>
-        </>
-      )
-    : <button
-      className="bg-indigo-500
+          placeholder="Your party punchline"
+        />
+        <button className={partyButtonClass()} disabled={isMining}>
+          {isMining ? <SpinnerIcon /> : "Throw Party!"}
+        </button>
+      </>
+    ) : (
+      <button
+        className="bg-indigo-500
         mx-auto
         text-lg
         font-medium
         py-4 px-6
+        w-72
         rounded-md
         transition-all
         hover:bg-indigo-600
@@ -138,10 +141,12 @@ export default function Index() {
         focus:ring-indigo-400
         focus:ring-opacity-40
         focus:outline-none"
-      onClick={authorizeWallet}
-    >
-      Connect Ethereum Wallet
-    </button>
+        onClick={authorizeWallet}
+        disabled={isAuthorizing}
+      >
+        {isAuthorizing ? <SpinnerIcon /> : 'Connect Ethereum Wallet'}
+      </button>
+    );
   };
 
   React.useEffect(() => {
@@ -149,87 +154,107 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="w-full mx-auto max-w-5xl
-      mt-32">
-      
-      <h1 className="text-center
+    <div
+      className="flex flex-col
+      min-h-screen
+      w-full mx-auto max-w-5xl
+      pt-32"
+    >
+      <section className="flex-1">
+        <h1
+          className="text-center
         text-5xl tracking-tight font-bold
-        leading-relaxed">
-        Be the life of the party overnight
-      </h1>
+        leading-relaxed"
+        >
+          Be the life of the party overnight
+        </h1>
 
-      <h2 className="text-center
+        <h2
+          className="text-center
         text-xl max-w-xl mx-auto
         text-gray-400
         leading-relaxed
-        mt-2">
-        PartyPopper is a service that throw wild parties for you
-        over the world of metaverse
-      </h2>
+        mt-2"
+        >
+          PartyPopper is a service that throw wild parties for you over the
+          world of metaverse. Throw parties with us and grab a chance to win
+          some ethers!
+        </h2>
 
-      <div className="flex
+        <div
+          className="flex
         w-full max-w-xl mx-auto
         space-x-4
-        mt-8">
-        {partyForm()}
-      </div>
+        mt-12"
+        >
+          {partyForm()}
+        </div>
 
-      <div className="flex flex-col items-center my-24 space-y-16">
-        <p className="text-center text-3xl font-bold tracking-tight">
-          Leaderboard
-        </p>
+        {account && (
+          <div className="flex flex-col items-center my-32 space-y-16">
+            <p className="text-center text-3xl font-bold tracking-tight">
+              Leaderboard
+            </p>
 
-        <div className="inline-grid grid-cols-2 grid-flow-row gap-12">
-          <div className="text-center
+            <div className="inline-grid grid-cols-2 grid-flow-row gap-12">
+              <div
+                className="text-center
             text-5xl
-            font-bold">
-            <p className="uppercase
+            font-bold"
+              >
+                <p
+                  className="uppercase
               text-sm 
               text-gray-400
               tracking-wider
-              mb-4">
-              Parties thrown
-            </p>
-            <p>
-              {partyCount}
-            </p>
-          </div>
+              mb-4"
+                >
+                  Parties thrown
+                </p>
+                <p>{partyCount}</p>
+              </div>
 
-          <div className="text-center
+              <div
+                className="text-center
             text-5xl
-            font-bold">
-            <p className="uppercase
+            font-bold"
+              >
+                <p
+                  className="uppercase
               text-sm 
               text-gray-400
               tracking-wider
-              mb-4">
-              Your Parties
-            </p>
-            <p>
-              {partyCount}
-            </p>
-          </div>
+              mb-4"
+                >
+                  Your Parties
+                </p>
+                <p>{partyCount}</p>
+              </div>
 
-          <div className="text-center
+              <div
+                className="text-center
             text-5xl
             font-bold
-            col-span-2">
-            <p className="uppercase
+            col-span-2"
+              >
+                <p
+                  className="uppercase
               text-sm 
               text-gray-400
               tracking-wider
-              mb-4">
-              The Party Animal
-            </p>
-            <p className="font-mono">
-              0xFABCASD
-            </p>
+              mb-4"
+                >
+                  The Party Animal
+                </p>
+                <p className="font-mono">0xFABCASD</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </section>
 
       <footer className="text-gray-400 text-center py-8">
-        Made in 2022 by{' '}
+        Made in 2022 by{" "}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -239,9 +264,11 @@ export default function Index() {
             active:text-indigo-300
             focus:text-indigo-300
             focus:outline-none"
-          href="https://www.github.com/Namchee">
+          href="https://www.github.com/Namchee"
+        >
           Namchee
-        </a> with guidance from{' '}
+        </a>{" "}
+        with guidance from{" "}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -251,7 +278,8 @@ export default function Index() {
             active:text-indigo-300
             focus:text-indigo-300
             focus:outline-none"
-          href="https://buildspace.so/">
+          href="https://buildspace.so/"
+        >
           buildspace
         </a>
       </footer>
