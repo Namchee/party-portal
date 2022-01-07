@@ -9,8 +9,37 @@ import SpinnerIcon from "~/components/Icon/LoadingIcon";
 export default function Index() {
   const [account, setAccount] = React.useState("");
   const [isAuthorizing, setIsAuthorizing] = React.useState(false);
+
   const [partyCount, setPartyCount] = React.useState(0);
+  const [myPartyCount, setMyPartyCount] = React.useState(0);
+  const [best, setBest] = React.useState('');
+
   const [isMining, setIsMining] = React.useState(false);
+
+  const [punchline, setPunchline] = React.useState('');
+
+  const refreshPartyCount = async () => {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
+
+      const partyCount = await contract.getTotalParty();
+      const parties = await contract.getParties();
+
+      const userParties = parties.filter(
+        (p: Record<string, string>) => p.host === account
+      ).length;
+
+      const bestHost: string = await contract.getBestHost();
+
+      setPartyCount(partyCount.toNumber());
+      setMyPartyCount(userParties);
+      setBest(bestHost.slice(0, 8));
+    }
+  }
 
   const checkWallet = async () => {
     const { ethereum } = window;
@@ -20,19 +49,15 @@ export default function Index() {
     }
 
     console.log("Wallet is connected!");
-    console.log(ethereum);
-
     const accounts = await ethereum.request({ method: "eth_accounts" });
-    console.log(accounts);
-
+    
     if (accounts.length) {
       const account = accounts[0];
       console.log(`Found an authorized account: ${account}`);
       setAccount(account);
+
       return;
     }
-
-    console.log("No account found!");
   };
 
   const authorizeWallet = async () => {
@@ -45,39 +70,33 @@ export default function Index() {
 
     setIsAuthorizing(true);
 
-    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
-
-    const partyCount = await contract.getPartyCount();
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     console.log(`Connected with: ${accounts[0]}`);
+  
     setIsAuthorizing(false);
-    setPartyCount(partyCount);
     setAccount(accounts[0]);
   };
 
   const party = async () => {
     const { ethereum } = window;
 
-    if (ethereum) {
+    if (ethereum && punchline) {
+      setIsMining(true);
+
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
-      let parties = await contract.getPartyCount();
-      setPartyCount(parties.toNumber());
-      setIsMining(true);
-
-      const partyTrx = await contract.throwParty();
-      console.log("Mining...", partyTrx.hash);
+      const partyTrx = await contract.throwParty(punchline);
+      console.log("Throwing party...", partyTrx.hash);
 
       await partyTrx.wait();
-      console.log("Mined...", partyTrx.hash);
-      setIsMining(false);
+      console.log("Party Thrown...", partyTrx.hash);
 
-      parties = await contract.getPartyCount();
-      setPartyCount(parties.toNumber());
+      setIsMining(false);
+      setPunchline('');
+      await refreshPartyCount();
+
       return;
     }
 
@@ -87,13 +106,13 @@ export default function Index() {
   const partyButtonClass = () => {
     return `mx-auto
     grid place-items-center
-    w-42 h-full
+    w-40 h-full
     py-4 px-6
     rounded-md
     text-lg
     font-medium
     transition-all
-    hover:bg-indigo-600
+    ${!isMining && 'hover:bg-indigo-600'}
     focus:bg-indigo-600
     focus:ring-4
     focus:ring-indigo-400
@@ -103,25 +122,37 @@ export default function Index() {
     ${isMining && "cursor-not-allowed"}`;
   };
 
+  const punchlineInputClass = () => {
+    return `mx-auto
+      px-6 py-4
+      bg-gray-700
+      text-xl
+      flex-1
+      rounded-md
+      transition-all
+      focus:ring-4
+      focus:ring-indigo-500
+      focus:ring-opacity-70
+      focus:outline-none
+      ${isMining && 'cursor-not-allowed'}
+      ${isMining && 'bg-gray-600'}`
+  };
+
   const partyForm = () => {
     return account ? (
       <>
         <input
           type="text"
-          className="mx-auto
-              px-6 py-4
-              bg-gray-700
-              text-xl
-              rounded-md
-              flex-1
-              transition-all
-              focus:ring-4
-            focus:ring-indigo-500
-            focus:ring-opacity-70
-            focus:outline-none"
+          className={punchlineInputClass()}
+          disabled={isMining}
+          value={punchline}
+          onChange={(e) => setPunchline(e.target.value)}
           placeholder="Your party punchline"
         />
-        <button className={partyButtonClass()} disabled={isMining}>
+        <button
+          onClick={party}
+          className={partyButtonClass()}
+          disabled={isMining}>
           {isMining ? <SpinnerIcon /> : "Throw Party!"}
         </button>
       </>
@@ -152,6 +183,12 @@ export default function Index() {
   React.useEffect(() => {
     checkWallet();
   }, []);
+
+  React.useEffect(() => {
+    if (account) {
+      refreshPartyCount();
+    }
+  }, [account]);
 
   return (
     <div
@@ -246,7 +283,9 @@ export default function Index() {
                 >
                   The Party Animal
                 </p>
-                <p className="font-mono">0xFABCASD</p>
+                <p className="font-mono">
+                  {best}
+                </p>
               </div>
             </div>
           </div>
