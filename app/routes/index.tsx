@@ -97,7 +97,9 @@ export default function Index() {
         const signer = provider.getSigner();
         const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
-        const partyTrx = await contract.throwParty(punchline);
+        const partyTrx = await contract.throwParty(punchline, {
+          gasLimit: 300000,
+        });
         console.log("Throwing party...", partyTrx.hash);
 
         await partyTrx.wait();
@@ -110,8 +112,8 @@ export default function Index() {
 
       throw new Error('Ethereum wallet does not exist!');
     } catch (err) {
-      const error = err as Error;
-      setError(error.message);
+      console.error(err);
+      setError('Slow down! You\'ve thrown too many parties!');
     } finally {
       setIsMining(false);
       setPunchline('');
@@ -153,6 +155,11 @@ export default function Index() {
       ${isMining && "bg-gray-600"}`;
   };
 
+  const updatePunchline = (e: InputEvent) => {
+    setPunchline((e.target as HTMLInputElement).value);
+    setError('');
+  }
+
   const partyForm = () => {
     return account ? (
       <>
@@ -161,7 +168,7 @@ export default function Index() {
           className={punchlineInputClass()}
           disabled={isMining}
           value={punchline}
-          onChange={(e) => setPunchline(e.target.value)}
+          onChange={updatePunchline}
           placeholder="Your party punchline"
         />
         <button
