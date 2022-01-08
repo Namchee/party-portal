@@ -186,13 +186,13 @@ export default function Index() {
         w-72
         rounded-md
         transition-all
-        ${!isAuthorizing && 'hover:bg-indigo-600'}
+        ${!isAuthorizing && "hover:bg-indigo-600"}
         focus:bg-indigo-600
         focus:ring-4
         focus:ring-indigo-400
         focus:ring-opacity-40
         focus:outline-none
-        ${isAuthorizing && 'cursor-not-allowed'}`}
+        ${isAuthorizing && "cursor-not-allowed"}`}
         onClick={authorizeWallet}
         disabled={isAuthorizing}
       >
@@ -323,35 +323,64 @@ export default function Index() {
         </div>
       </section>
 
-      <footer className="text-gray-400 text-center py-8">
-        Made in 2022 by{" "}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-indigo-400
+      <footer className="text-gray-400 text-center py-8 space-y-2">
+        <p>
+          Made in 2022 by{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400
             transition-colors
             hover:text-indigo-300
             active:text-indigo-300
             focus:text-indigo-300
             focus:outline-none"
-          href="https://www.github.com/Namchee"
-        >
-          Namchee
-        </a>{" "}
-        with guidance from{" "}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-indigo-400
+            href="https://www.github.com/Namchee"
+          >
+            Namchee
+          </a>{" "}
+          with guidance from{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400
             transition-colors
             hover:text-indigo-300
             active:text-indigo-300
             focus:text-indigo-300
             focus:outline-none"
-          href="https://buildspace.so/"
-        >
-          buildspace
-        </a>
+            href="https://buildspace.so/"
+          >
+            buildspace
+          </a>
+        </p>
+        <p className="text-xs">
+          View <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400
+            transition-colors
+            hover:text-indigo-300
+            active:text-indigo-300
+            focus:text-indigo-300
+            focus:outline-none"
+            href="https://rinkeby.etherscan.io/tx/0xa25b64d329bd1736c62c287330370dc8e17bc97842ab7cc4fceac928381b67cf"
+          >
+            contract
+          </a> on <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400
+            transition-colors
+            hover:text-indigo-300
+            active:text-indigo-300
+            focus:text-indigo-300
+            focus:outline-none"
+            href="https://etherscan.io/"
+          >
+            Etherscan
+          </a>
+        </p>
       </footer>
     </div>
   );
