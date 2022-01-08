@@ -2,11 +2,14 @@ import * as React from "react";
 
 import { ethers } from "ethers";
 
-import ABI from "~/constant/contract.json";
-import { CONTRACT_ADDRESS } from "~/constant/eth";
 import SpinnerIcon from "~/components/Icon/LoadingIcon";
 
+import ABI from "~/constant/contract.json";
+import { CONTRACT_ADDRESS } from "~/constant/eth";
+
 export default function Index() {
+  const [hasMetamask, setHasMetamask] = React.useState(true);
+
   const [account, setAccount] = React.useState("");
   const [isAuthorizing, setIsAuthorizing] = React.useState(false);
 
@@ -27,7 +30,7 @@ export default function Index() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
-      const partyCount = await contract.getTotalParty();
+      const partyCount = await contract.getPartyCount();
       const parties = await contract.getParties();
 
       const userParties = parties.filter((p: Record<string, string>) => {
@@ -44,6 +47,7 @@ export default function Index() {
 
   const checkWallet = async () => {
     const { ethereum } = window;
+
     if (!ethereum) {
       console.log("Wallet is not connected!");
       return;
@@ -56,8 +60,6 @@ export default function Index() {
       const account = accounts[0];
       console.log(`Found an authorized account: ${account}`);
       setAccount(account);
-
-      return;
     }
   };
 
@@ -96,14 +98,7 @@ export default function Index() {
         const partyTrx = await contract.throwParty(punchline, {
           gasLimit: 300000,
         });
-        console.log("Throwing party...", partyTrx.hash);
-
-        await partyTrx.wait();
-        console.log("Party Thrown...", partyTrx.hash);
-
-        await refreshPartyCount();
-
-        return;
+        return await partyTrx.wait();
       }
 
       throw new Error("Ethereum wallet does not exist!");
@@ -118,6 +113,7 @@ export default function Index() {
 
   const partyButtonClass = () => {
     return `mx-auto
+    shadow
     grid place-items-center
     w-40 h-full
     py-4 px-6
@@ -137,6 +133,7 @@ export default function Index() {
 
   const punchlineInputClass = () => {
     return `mx-auto
+      shadow
       px-6 py-4
       bg-gray-700
       text-xl
@@ -192,6 +189,7 @@ export default function Index() {
         focus:ring-indigo-400
         focus:ring-opacity-40
         focus:outline-none
+        shadow
         ${isAuthorizing && "cursor-not-allowed"}`}
         onClick={authorizeWallet}
         disabled={isAuthorizing}
@@ -211,7 +209,39 @@ export default function Index() {
     }
   }, [account]);
 
-  React.useEffect(() => {});
+  React.useEffect(() => {
+    const onNewParty = (host: string) => {
+      setPartyCount(partyCount + 1);
+
+      if (account.toUpperCase() === host.toUpperCase()) {
+        setMyPartyCount(myPartyCount + 1);
+      }
+    };
+
+    const onNewLeader = (host: string) => {
+      setBest(host);
+    };
+
+    let contract: ethers.Contract;
+
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+
+      contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
+      contract.on('NewParty', onNewParty);
+      contract.on('NewLeader', onNewLeader);
+    }
+
+    return () => {
+      if (contract) {
+        contract.off('NewParty', onNewParty);
+        contract.off('NewLeader', onNewLeader);
+      }
+    }
+  }, []);
 
   return (
     <div

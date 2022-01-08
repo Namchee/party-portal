@@ -1,5 +1,5 @@
 {
-  "version": "639d93ef",
+  "version": "b73e3079",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-AXS4D7JS.js",
+      "module": "/build/routes/index-37JTRIJ2.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-639D93EF.js"
+  "url": "/build/manifest-B73E3079.js"
 }
