@@ -10,7 +10,23 @@ import styles from './style.css';
 import type { MetaFunction, LinksFunction } from 'remix';
 
 export const meta: MetaFunction = () => {
-  return { title: 'PartyPortal' };
+  const description = 'Throw parties on metaverse and win some ethers!';
+
+  return {
+    title: 'PartyPortal',
+    description,
+    keywords: 'Remix,Web3,Metamask,buildspace',
+    'og:title': 'PartyPortal',
+    'og:description': description,
+    'og:image': '/og-banner.png',
+    'og:url': 'https://sol-three.vercel.app',
+    'og:type': 'website',
+    'twitter:title': 'PartyPortal',
+    'twitter:description': description,
+    'twitter:card': 'summary_large_image',
+    'twitter:size': '@lakban_hitam',
+    'twitter:creator': '@lakban_hitam',
+  };
 };
 
 export const links: LinksFunction = () => {

@@ -104,7 +104,13 @@ export default function Index() {
       throw new Error("Ethereum wallet does not exist!");
     } catch (err) {
       console.error(err);
-      setError("Slow down! You've thrown too many parties!");
+
+      const error = err as Error;
+      if (error.message.startsWith('transaction')) {
+        setError("Slow down! You've thrown too many parties at once!");
+      } else {
+        setError(error.message);
+      }
     } finally {
       setIsMining(false);
       setPunchline("");
@@ -127,7 +133,7 @@ export default function Index() {
     focus:ring-indigo-400
     focus:ring-opacity-40
     focus:outline-none
-    ${isMining ? "bg-indigo-500" : "bg-indigo-600"}
+    ${isMining ? "bg-indigo-400" : "bg-indigo-500"}
     ${isMining && "cursor-not-allowed"}`;
   };
 
@@ -267,7 +273,7 @@ export default function Index() {
         leading-relaxed
         mt-2"
         >
-          PartyPopper is a service that throw wild parties for you over the
+          PartyPortal is a service that throw wild parties for you over the
           world of metaverse. Throw parties with us and grab a chance to win
           some ethers!
         </h2>
