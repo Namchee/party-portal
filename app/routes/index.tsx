@@ -99,8 +99,6 @@ export default function Index() {
         await partyTrx.wait();
         console.log("Party Thrown...", partyTrx.hash);
 
-        setIsMining(false);
-        setPunchline("");
         await refreshPartyCount();
 
         return;
@@ -110,6 +108,9 @@ export default function Index() {
     } catch (err) {
       const error = err as Error;
       setError(error.message);
+    } finally {
+      setIsMining(false);
+      setPunchline('');
     }
   };
 
