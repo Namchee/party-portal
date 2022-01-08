@@ -30,7 +30,7 @@ export default function Index() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
-      const partyCount = await contract.getPartyCount();
+      const totalParties = await contract.getPartyCount();
       const parties = await contract.getParties();
 
       const userParties = parties.filter((p: Record<string, string>) => {
@@ -39,7 +39,7 @@ export default function Index() {
 
       const bestHost: string = await contract.getBestHost();
 
-      setPartyCount(partyCount.toNumber());
+      setPartyCount(totalParties.toNumber());
       setMyPartyCount(userParties);
       setBest(bestHost);
     }
@@ -49,11 +49,10 @@ export default function Index() {
     const { ethereum } = window;
 
     if (!ethereum) {
-      console.log("Wallet is not connected!");
+      setHasMetamask(false);
       return;
     }
 
-    console.log("Wallet is connected!");
     const accounts = await ethereum.request({ method: "eth_accounts" });
 
     if (accounts.length) {
@@ -106,7 +105,7 @@ export default function Index() {
       console.error(err);
 
       const error = err as Error;
-      if (error.message.startsWith('transaction')) {
+      if (error.message.startsWith("transaction")) {
         setError("Slow down! You've thrown too many parties at once!");
       } else {
         setError(error.message);
@@ -160,6 +159,29 @@ export default function Index() {
   };
 
   const partyForm = () => {
+    if (!hasMetamask) {
+      return (
+        <p
+          className="text-gray-300 text-2xl text-center leading-relaxed">
+          To use this awesome portal, install{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400
+            transition-colors
+            hover:text-indigo-300
+            active:text-indigo-300
+            focus:text-indigo-300
+            focus:outline-none"
+            href="https://metamask.io/"
+          >
+            Metamask
+          </a> and refresh this page
+          after installing
+        </p>
+      );
+    }
+
     return account ? (
       <>
         <input
@@ -217,10 +239,16 @@ export default function Index() {
 
   React.useEffect(() => {
     const onNewParty = (host: string) => {
+      console.log(`host: ${host}`);
+      console.log(`before: ${partyCount}`);
       setPartyCount(partyCount + 1);
+      console.log(`after: ${partyCount}`);
+
 
       if (account.toUpperCase() === host.toUpperCase()) {
+        console.log(`before: ${myPartyCount}`);
         setMyPartyCount(myPartyCount + 1);
+        console.log(`after: ${myPartyCount}`);
       }
     };
 
@@ -237,16 +265,16 @@ export default function Index() {
       const signer = provider.getSigner();
 
       contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
-      contract.on('NewParty', onNewParty);
-      contract.on('NewLeader', onNewLeader);
+      contract.on("NewParty", onNewParty);
+      contract.on("NewLeader", onNewLeader);
     }
 
     return () => {
       if (contract) {
-        contract.off('NewParty', onNewParty);
-        contract.off('NewLeader', onNewLeader);
+        contract.off("NewParty", onNewParty);
+        contract.off("NewLeader", onNewLeader);
       }
-    }
+    };
   }, []);
 
   return (
@@ -391,7 +419,8 @@ export default function Index() {
           </a>
         </p>
         <p className="text-xs">
-          View <a
+          View{" "}
+          <a
             target="_blank"
             rel="noopener noreferrer"
             className="text-indigo-400
@@ -403,7 +432,9 @@ export default function Index() {
             href="https://rinkeby.etherscan.io/tx/0xa25b64d329bd1736c62c287330370dc8e17bc97842ab7cc4fceac928381b67cf"
           >
             contract
-          </a> on <a
+          </a>{" "}
+          on{" "}
+          <a
             target="_blank"
             rel="noopener noreferrer"
             className="text-indigo-400
