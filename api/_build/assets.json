@@ -1,5 +1,5 @@
 {
-  "version": "dc12e299",
+  "version": "a2c0be18",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-R6APBBLG.js",
+      "module": "/build/routes/index-DOV3KPOK.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-DC12E299.js"
+  "url": "/build/manifest-A2C0BE18.js"
 }

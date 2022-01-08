@@ -12,11 +12,12 @@ export default function Index() {
 
   const [partyCount, setPartyCount] = React.useState(0);
   const [myPartyCount, setMyPartyCount] = React.useState(0);
-  const [best, setBest] = React.useState('');
+  const [best, setBest] = React.useState("");
 
   const [isMining, setIsMining] = React.useState(false);
 
-  const [punchline, setPunchline] = React.useState('');
+  const [punchline, setPunchline] = React.useState("");
+  const [error, setError] = React.useState('');
 
   const refreshPartyCount = async () => {
     const { ethereum } = window;
@@ -39,7 +40,7 @@ export default function Index() {
       setMyPartyCount(userParties);
       setBest(bestHost.slice(0, 8));
     }
-  }
+  };
 
   const checkWallet = async () => {
     const { ethereum } = window;
@@ -50,7 +51,7 @@ export default function Index() {
 
     console.log("Wallet is connected!");
     const accounts = await ethereum.request({ method: "eth_accounts" });
-    
+
     if (accounts.length) {
       const account = accounts[0];
       console.log(`Found an authorized account: ${account}`);
@@ -70,37 +71,46 @@ export default function Index() {
 
     setIsAuthorizing(true);
 
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     console.log(`Connected with: ${accounts[0]}`);
-  
+
     setIsAuthorizing(false);
     setAccount(accounts[0]);
   };
 
   const party = async () => {
-    const { ethereum } = window;
+    try {
+      if (!punchline) {
+        throw new Error('Party punchline is required!');
+      }
 
-    if (ethereum && punchline) {
-      setIsMining(true);
+      const { ethereum } = window;
 
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
+      if (ethereum && punchline) {
+        setIsMining(true);
 
-      const partyTrx = await contract.throwParty(punchline);
-      console.log("Throwing party...", partyTrx.hash);
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
-      await partyTrx.wait();
-      console.log("Party Thrown...", partyTrx.hash);
+        const partyTrx = await contract.throwParty(punchline);
+        console.log("Throwing party...", partyTrx.hash);
 
-      setIsMining(false);
-      setPunchline('');
-      await refreshPartyCount();
+        await partyTrx.wait();
+        console.log("Party Thrown...", partyTrx.hash);
 
-      return;
+        setIsMining(false);
+        setPunchline("");
+        await refreshPartyCount();
+
+        return;
+      }
+
+      throw new Error('Ethereum wallet does not exist!');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message);
     }
-
-    console.log("Ethereum wallet does not exist!");
   };
 
   const partyButtonClass = () => {
@@ -112,7 +122,7 @@ export default function Index() {
     text-lg
     font-medium
     transition-all
-    ${!isMining && 'hover:bg-indigo-600'}
+    ${!isMining && "hover:bg-indigo-600"}
     focus:bg-indigo-600
     focus:ring-4
     focus:ring-indigo-400
@@ -134,8 +144,8 @@ export default function Index() {
       focus:ring-indigo-500
       focus:ring-opacity-70
       focus:outline-none
-      ${isMining && 'cursor-not-allowed'}
-      ${isMining && 'bg-gray-600'}`
+      ${isMining && "cursor-not-allowed"}
+      ${isMining && "bg-gray-600"}`;
   };
 
   const partyForm = () => {
@@ -152,7 +162,8 @@ export default function Index() {
         <button
           onClick={party}
           className={partyButtonClass()}
-          disabled={isMining}>
+          disabled={isMining}
+        >
           {isMining ? <SpinnerIcon /> : "Throw Party!"}
         </button>
       </>
@@ -160,6 +171,7 @@ export default function Index() {
       <button
         className="bg-indigo-500
         mx-auto
+        grid place-items-center
         text-lg
         font-medium
         py-4 px-6
@@ -175,7 +187,7 @@ export default function Index() {
         onClick={authorizeWallet}
         disabled={isAuthorizing}
       >
-        {isAuthorizing ? <SpinnerIcon /> : 'Connect Ethereum Wallet'}
+        {isAuthorizing ? <SpinnerIcon /> : "Connect Ethereum Wallet"}
       </button>
     );
   };
@@ -226,6 +238,13 @@ export default function Index() {
         >
           {partyForm()}
         </div>
+
+        {error &&
+          <p
+            className="text-red-500 text-center mt-2">
+            {error}
+          </p>
+        }
 
         {account && (
           <div className="flex flex-col items-center my-32 space-y-16">
@@ -283,9 +302,7 @@ export default function Index() {
                 >
                   The Party Animal
                 </p>
-                <p className="font-mono">
-                  {best}
-                </p>
+                <p className="font-mono">{best}</p>
               </div>
             </div>
           </div>
