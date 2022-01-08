@@ -265,7 +265,7 @@ export default function Index() {
                 >
                   Your Parties
                 </p>
-                <p>{partyCount}</p>
+                <p>{myPartyCount}</p>
               </div>
 
               <div
