@@ -30,8 +30,6 @@ export default function Index() {
       const partyCount = await contract.getTotalParty();
       const parties = await contract.getParties();
 
-      console.log(account);
-
       const userParties = parties.filter(
         (p: Record<string, string>) => {
           return p.host.toUpperCase() === account.toUpperCase();
@@ -155,8 +153,8 @@ export default function Index() {
       ${isMining && "bg-gray-600"}`;
   };
 
-  const updatePunchline = (e: InputEvent) => {
-    setPunchline((e.target as HTMLInputElement).value);
+  const updatePunchline = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPunchline(e.target.value);
     setError('');
   }
 
