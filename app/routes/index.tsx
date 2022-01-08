@@ -17,7 +17,7 @@ export default function Index() {
   const [isMining, setIsMining] = React.useState(false);
 
   const [punchline, setPunchline] = React.useState("");
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState("");
 
   const refreshPartyCount = async () => {
     const { ethereum } = window;
@@ -30,11 +30,9 @@ export default function Index() {
       const partyCount = await contract.getTotalParty();
       const parties = await contract.getParties();
 
-      const userParties = parties.filter(
-        (p: Record<string, string>) => {
-          return p.host.toUpperCase() === account.toUpperCase();
-        }
-      ).length;
+      const userParties = parties.filter((p: Record<string, string>) => {
+        return p.host.toUpperCase() === account.toUpperCase();
+      }).length;
 
       const bestHost: string = await contract.getBestHost();
 
@@ -83,7 +81,7 @@ export default function Index() {
   const party = async () => {
     try {
       if (!punchline) {
-        throw new Error('Party punchline is required!');
+        throw new Error("Party punchline is required!");
       }
 
       const { ethereum } = window;
@@ -108,13 +106,13 @@ export default function Index() {
         return;
       }
 
-      throw new Error('Ethereum wallet does not exist!');
+      throw new Error("Ethereum wallet does not exist!");
     } catch (err) {
       console.error(err);
-      setError('Slow down! You\'ve thrown too many parties!');
+      setError("Slow down! You've thrown too many parties!");
     } finally {
       setIsMining(false);
-      setPunchline('');
+      setPunchline("");
     }
   };
 
@@ -155,8 +153,8 @@ export default function Index() {
 
   const updatePunchline = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPunchline(e.target.value);
-    setError('');
-  }
+    setError("");
+  };
 
   const partyForm = () => {
     return account ? (
@@ -179,7 +177,7 @@ export default function Index() {
       </>
     ) : (
       <button
-        className="bg-indigo-500
+        className={`bg-indigo-500
         mx-auto
         grid place-items-center
         text-lg
@@ -188,12 +186,13 @@ export default function Index() {
         w-72
         rounded-md
         transition-all
-        hover:bg-indigo-600
+        ${!isAuthorizing && 'hover:bg-indigo-600'}
         focus:bg-indigo-600
         focus:ring-4
         focus:ring-indigo-400
         focus:ring-opacity-40
-        focus:outline-none"
+        focus:outline-none
+        ${isAuthorizing && 'cursor-not-allowed'}`}
         onClick={authorizeWallet}
         disabled={isAuthorizing}
       >
@@ -212,6 +211,8 @@ export default function Index() {
     }
   }, [account]);
 
+  React.useEffect(() => {});
+
   return (
     <div
       className="flex flex-col
@@ -225,7 +226,8 @@ export default function Index() {
         text-5xl tracking-tight font-bold
         leading-relaxed"
         >
-          Be the life of the party overnight
+          Be the life of the <span className="text-yellow-300">party</span>{" "}
+          overnight
         </h1>
 
         <h2
@@ -249,37 +251,32 @@ export default function Index() {
           {partyForm()}
         </div>
 
-        {error &&
-          <p
-            className="text-red-500 text-center mt-2">
-            {error}
+        {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+
+        <div className="flex flex-col items-center mt-36 space-y-12">
+          <p className="text-center text-3xl font-bold tracking-tight">
+            Current Leaderboard
           </p>
-        }
 
-        {account && (
-          <div className="flex flex-col items-center my-32 space-y-16">
-            <p className="text-center text-3xl font-bold tracking-tight">
-              Leaderboard
-            </p>
-
-            <div className="inline-grid grid-cols-2 grid-flow-row gap-12">
-              <div
-                className="text-center
+          <div className="flex justify-center space-x-16">
+            <div
+              className="text-center
             text-5xl
             font-bold"
-              >
-                <p
-                  className="uppercase
+            >
+              <p
+                className="uppercase
               text-sm 
               text-gray-400
               tracking-wider
               mb-4"
-                >
-                  Parties thrown
-                </p>
-                <p>{partyCount}</p>
-              </div>
+              >
+                Total Parties
+              </p>
+              <p>{partyCount}</p>
+            </div>
 
+            {account && (
               <div
                 className="text-center
             text-5xl
@@ -296,29 +293,34 @@ export default function Index() {
                 </p>
                 <p>{myPartyCount}</p>
               </div>
+            )}
+          </div>
+        </div>
 
-              <div
-                className="text-center
-            text-5xl
-            font-bold
-            col-span-2"
-              >
-                <p
-                  className="uppercase
+        <div
+          className="text-center
+              mt-12 mb-28
+              font-bold
+              col-span-2"
+        >
+          <p
+            className="uppercase
               text-sm 
               text-gray-400
               tracking-wider
+              
               mb-4"
-                >
-                  The Party Animal
-                </p>
-                <p className="font-mono">
-                  {best && `${best.slice(0, 4)}...${best.slice(best.length - 3)}`}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+          >
+            The Party Animal
+          </p>
+          {best ? (
+            <p className="font-mono text-5xl">
+              {`${best.slice(0, 4)}...${best.slice(best.length - 3)}`}
+            </p>
+          ) : (
+            <p className="text-2xl">None yet. Be the first!</p>
+          )}
+        </div>
       </section>
 
       <footer className="text-gray-400 text-center py-8">
