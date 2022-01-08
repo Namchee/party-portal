@@ -1,5 +1,5 @@
 {
-  "version": "a2c0be18",
+  "version": "4723739e",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-DOV3KPOK.js",
+      "module": "/build/routes/index-SIU7ESIN.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-A2C0BE18.js"
+  "url": "/build/manifest-4723739E.js"
 }

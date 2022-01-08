@@ -38,7 +38,7 @@ export default function Index() {
 
       setPartyCount(partyCount.toNumber());
       setMyPartyCount(userParties);
-      setBest(bestHost.slice(0, 8));
+      setBest(bestHost);
     }
   };
 
@@ -302,7 +302,9 @@ export default function Index() {
                 >
                   The Party Animal
                 </p>
-                <p className="font-mono">{best}</p>
+                <p className="font-mono">
+                  {best && `${best.slice(0, 4)}...${best.slice(best.length - 3)}`}
+                </p>
               </div>
             </div>
           </div>
