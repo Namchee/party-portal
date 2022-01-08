@@ -1,5 +1,5 @@
 {
-  "version": "3faef5bf",
+  "version": "cc6d2989",
   "entry": {
     "module": "/build/entry.client-LA2YY3WC.js",
     "imports": [
@@ -21,12 +21,12 @@
       "id": "routes/index",
       "parentId": "root",
       "index": true,
-      "module": "/build/routes/index-7YNTCVTO.js",
+      "module": "/build/routes/index-YA4ANKU3.js",
       "hasAction": false,
       "hasLoader": false,
       "hasCatchBoundary": false,
       "hasErrorBoundary": false
     }
   },
-  "url": "/build/manifest-3FAEF5BF.js"
+  "url": "/build/manifest-CC6D2989.js"
 }

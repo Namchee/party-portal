@@ -239,16 +239,10 @@ export default function Index() {
 
   React.useEffect(() => {
     const onNewParty = (host: string) => {
-      console.log(`host: ${host}`);
-      console.log(`before: ${partyCount}`);
-      setPartyCount(partyCount + 1);
-      console.log(`after: ${partyCount}`);
-
+      setPartyCount(prev => prev + 1);
 
       if (account.toUpperCase() === host.toUpperCase()) {
-        console.log(`before: ${myPartyCount}`);
-        setMyPartyCount(myPartyCount + 1);
-        console.log(`after: ${myPartyCount}`);
+        setMyPartyCount(prev => prev + 1);
       }
     };
 
