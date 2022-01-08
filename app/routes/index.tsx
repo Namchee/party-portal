@@ -30,8 +30,12 @@ export default function Index() {
       const partyCount = await contract.getTotalParty();
       const parties = await contract.getParties();
 
+      console.log(account);
+
       const userParties = parties.filter(
-        (p: Record<string, string>) => p.host === account
+        (p: Record<string, string>) => {
+          return p.host.toUpperCase() === account.toUpperCase();
+        }
       ).length;
 
       const bestHost: string = await contract.getBestHost();
