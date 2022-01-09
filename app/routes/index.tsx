@@ -402,7 +402,7 @@ export default function Index() {
           >
             Namchee
           </a>{" "}
-          with guidance from{" "}
+          following tutorial from{" "}
           <a
             target="_blank"
             rel="noopener noreferrer"
