@@ -18,7 +18,7 @@ export const meta: MetaFunction = () => {
     keywords: 'Remix,Web3,Metamask,buildspace',
     'og:title': 'PartyPortal',
     'og:description': description,
-    'og:image': '/og-banner.png',
+    'og:image': '/og-image.png',
     'og:url': 'https://sol-three.vercel.app',
     'og:type': 'website',
     'twitter:title': 'PartyPortal',
