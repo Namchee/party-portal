@@ -31,16 +31,20 @@ export default function Index() {
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, signer);
 
       const totalParties = await contract.getPartyCount();
-      const parties = await contract.getParties();
 
-      const userParties = parties.filter((p: Record<string, string>) => {
-        return p.host.toUpperCase() === account.toUpperCase();
-      }).length;
+      if (account) {
+        const parties = await contract.getParties();
+
+        const userParties = parties.filter((p: Record<string, string>) => {
+          return p.host.toUpperCase() === account.toUpperCase();
+        }).length;
+
+        setMyPartyCount(userParties);
+      }
 
       const bestHost: string = await contract.getBestHost();
 
       setPartyCount(totalParties.toNumber());
-      setMyPartyCount(userParties);
       setBest(bestHost);
     }
   };
@@ -229,6 +233,7 @@ export default function Index() {
 
   React.useEffect(() => {
     checkWallet();
+    refreshPartyCount();
   }, []);
 
   React.useEffect(() => {
