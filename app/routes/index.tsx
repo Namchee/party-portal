@@ -269,7 +269,7 @@ export default function Index() {
         contract.off("NewLeader", onNewLeader);
       }
     };
-  }, []);
+  }, [account]);
 
   return (
     <div
@@ -371,7 +371,7 @@ export default function Index() {
           >
             The Party Animal
           </p>
-          {best ? (
+          {best && Number.parseInt(best) ? (
             <p className="font-mono text-5xl">
               {`${best.slice(0, 4)}...${best.slice(best.length - 3)}`}
             </p>
