@@ -423,7 +423,7 @@ export default function Index() {
             active:text-indigo-300
             focus:text-indigo-300
             focus:outline-none"
-            href="https://rinkeby.etherscan.io/tx/0xa25b64d329bd1736c62c287330370dc8e17bc97842ab7cc4fceac928381b67cf"
+            href="https://rinkeby.etherscan.io/tx/0xed77e781bb1b284f65981a15a7763ce78637c50bfd5ab1da0c364908402ecd3c"
           >
             contract
           </a>{" "}
